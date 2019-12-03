@@ -34,7 +34,8 @@ executable aoc2019
                        TemplateHaskell,
                        FlexibleContexts,
                        DerivingVia,
-                       StandaloneDeriving
+                       StandaloneDeriving,
+                       NamedFieldPuns
                        
   build-depends:       base >= 4.7 && < 5,
                        hspec,
@@ -42,4 +43,5 @@ executable aoc2019
                        containers,
                        pretty-simple,
                        text,
-                       PyF
+                       PyF,
+                       containers

@@ -2,6 +2,8 @@ module Main
 (
   module Helpers,
   module Day1,
+  module Day2,
+  module Day3,
   main
 ) where
 
@@ -16,8 +18,9 @@ import Text.Pretty.Simple (pPrint)
 import Test.Hspec
 import Data.Text
 
-import Day1 as Day1
-import Day2 as Day2
+import qualified Day1 as Day1
+import qualified Day2 as Day2
+import Day3
 
 main :: IO ()
 main = do
