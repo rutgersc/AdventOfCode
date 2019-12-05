@@ -4,6 +4,7 @@ module Main
   module Day1,
   module Day2,
   module Day3,
+  module Day4,
   main
 ) where
 
@@ -21,6 +22,7 @@ import Data.Text
 import qualified Day1 as Day1
 import qualified Day2 as Day2
 import Day3
+import Day4
 
 main :: IO ()
 main = do
