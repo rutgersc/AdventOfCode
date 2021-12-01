@@ -22,3 +22,9 @@ cabal.project.local~
 .HTF/
 .ghc.environment.*
 .vscode
+.ionide
+.config
+bin/
+obj/
+.idea/
+.vs/

@@ -24,8 +24,11 @@ day4_examples_1 =
 day4input :: [Int]
 day4input = [235741..706948]
 
+digits :: Int -> [Int]
 digits 0 = []
 digits x = digits (x `div` 10) ++ [x `mod` 10]
+
+digit x = (x `div` 10 , x `mod` 10)
 
 twoAdjacent = any (>=2) . L.map length . group
 

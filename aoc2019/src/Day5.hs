@@ -20,13 +20,15 @@ import Day4 as Day4
 import Data.Maybe
 
 day5_examples_1 =
-  [ (111111, True),
-    (223450, False),
-    (123789, False)
+  [ ((200,[3,0,4,0,99]), 200)
+
   ]
 
 day5input :: [Int]
-day5input = undefined
+day5input = [3,0,4,0,99]
+
+day5input2 :: [Int]
+day5input2 = [1002,4,3,4,33]
 
 solveday5_1 = undefined -- head $ view _1  $ fixComputer $ restore (instructions input) (12, 2)
 
@@ -34,29 +36,39 @@ solveday5_2 = undefined
 
 -- Part 1
 
-fixComputer' :: Int -> FullProgram -> FullProgram
-fixComputer' input = _1 %~ fst . go 0
+fixComputer' :: Int -> Program -> Program
+fixComputer' input = fst . go 0
   where
     go pos instructions =
-      let (opAndMode : params) = P.drop pos instructions
-          (op, m1, m2) = getModeFrom opAndMode
+      let (op, p0, p1, address, m1, m2) = readInstruction pos (traceIns instructions)
+          valueAtAddr = (!!) instructions
           binaryOp o =
-            let (p1 : p2 : address : _) = params
-                (v1, v2) = over both ((!!) instructions) (p1, p2)
+            let (v1, v2) = over both valueAtAddr (p0, p1)
             in go (pos + 4) $ instructions & ix address .~ v1 `o` v2
-       in case op of
+       in case trace [fmt|op: {op}|] $ op of
             1 -> binaryOp (+)
             2 -> binaryOp (*)
-            3 -> go (pos + 2) $ instructions & ix (params !! 0) .~ input
-            4 -> go (pos + 2) $ instructions & trace [fmt|output = {params !! 0}|]
-            99 -> (instructions, pos)
+            3 -> go (pos + 2) $ instructions & ix p0 .~ input
+            4 -> go (pos + 2) $ instructions & trace [fmt|output = {valueAtAddr p0}|]
+            99 -> trace "halting" (instructions, pos)
             _ -> error "undefined"
 
-getModeFrom :: Int -> (Int, Int, Int)
-getModeFrom opcode = (p 0, p 1, p 2)
-  where 
-    digits = reverse $ Day4.digits opcode
-    p i = fromMaybe 0 $ digits ^? ix i
+readInstruction pos instructions = 
+  let (opAndModes : params) =  P.drop pos instructions
+      digits = Day4.digits $ opAndModes
+      opModes = tracse $ reverse $ digits
+      op = tracde $ P.reverse $ P.concat $ show <$> P.take 2 opModes
+      modes = default0 $ P.drop 2 opModes
+      param = default0 params
+  in (read @Int op, param 0, param 1, param 2, modes 0, modes 1)
+
+default0 list i = fromMaybe 0 $ list ^? (ix i)
+
+tracse v = trace ("opstr ==  " <> show v) v
+tracde v = trace ("op ==  " <> show v) v
+
+traceIns :: Show a => a -> a
+traceIns v = trace ("instructions " <> show v) v
 
 {-
 opcode =
