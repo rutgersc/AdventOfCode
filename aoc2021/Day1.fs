@@ -1,25 +1,13 @@
 module aoc2021.Day1
 
+open Types
 open Helpers
 
-type Depth = int
-
-let addDeltas depths =
-    let prevs =
-        seq {
-            yield None
-            yield! depths |> Seq.map Some
-        }
-
-    Seq.zip prevs depths |> Seq.map (fun (prev, curr) -> curr, prev |> Option.map ((-) curr))
-
-let sumDeltas =
-    function
-    | _, Some delta when delta > 0 -> 1
-    | _ -> 0
-
 let solve1 (depths: seq<Depth>) =
-    depths |> addDeltas |> Seq.sumBy sumDeltas
+    depths
+    |> Seq.pairwise
+    |> Seq.filter (fun (a,b)-> b > a)
+    |> Seq.length
 
 let solve2 (depths: seq<Depth>) =
     let windowed size (source: int seq) =
