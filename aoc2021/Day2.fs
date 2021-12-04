@@ -52,4 +52,4 @@ let answerExample1 = readCmds "Day2-example.txt" |> solve1
 let answerExample2 = readCmds "Day2-example.txt" |> solve2
 
 let answer1 = readCmds "Day2.txt" |> solve1
-let answer2 = readCmds "Day2-2.txt" |> solve2
+let answer2 = readCmds "Day2.txt" |> solve2
