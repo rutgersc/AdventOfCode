@@ -11,26 +11,25 @@ let readVents (lines: string []) =
     |> Seq.collect (fun p -> p.Trim().Split ",")
     |> Seq.map int
     |> Seq.chunkBySize 4
-    |> Seq.map
-        (function
+    |> Seq.map (function
         | [| x1 ; y1 ; x2 ; y2 |] -> (x1, y1), (x2, y2)
         | _ -> failwith "")
 
 let isNotDiagonal (x1, y1) (x2, y2) = x1 = x2 || y1 = y2
 
-let allPoints (x1: int, y1: int) (x2, y2) =
+let allPointsFromStraightLine (x1: int, y1: int) (x2, y2) =
     let (minX, minY) = Math.Min (x1, x2), Math.Min (y1, y2)
     let (maxX, maxY) = Math.Max (x1, x2), Math.Max (y1, y2)
 
     seq {
-        for x in minX .. maxX do
-            for y in minY .. maxY do
+        for x in minX..maxX do
+            for y in minY..maxY do
                 yield x, y
     }
 
-let allPointsDdiag (x1: int, y1: int) (x2, y2) =
+let allPoints (x1: int, y1: int) (x2, y2) =
     if isNotDiagonal (x1, y1) (x2, y2) then
-        allPoints (x1, y1) (x2, y2)
+        allPointsFromStraightLine (x1, y1) (x2, y2)
     else
 
     let (startX, startY, slope) =
@@ -54,14 +53,14 @@ let countPoints (state: Map<Point, int>) p =
 let solve1 (vents: seq<Point * Point>) =
     vents
     |> Seq.filter (uncurry isNotDiagonal)
-    |> Seq.collect (uncurry allPoints)
+    |> Seq.collect (uncurry allPointsFromStraightLine)
     |> Seq.fold countPoints Map.empty
     |> Seq.filter (fun kvp -> 2 <= kvp.Value)
     |> Seq.length
 
 let solve2 (vents: seq<Point * Point>) =
     vents
-    |> Seq.collect (uncurry allPointsDdiag)
+    |> Seq.collect (uncurry allPoints)
     |> Seq.fold countPoints Map.empty
     |> Seq.filter (fun kvp -> 2 <= kvp.Value)
     |> Seq.length
