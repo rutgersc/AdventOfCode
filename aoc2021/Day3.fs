@@ -10,6 +10,11 @@ let flipBit b = if b = 1 then 0 else 1
 let bitCountToBit count = if count > 0 then 1 else 0
 let bitArrayToDecimal arr = arr |> Array.map string |> joinChars |> toInt
 
+let traceBitBLock bitBlockInts  =
+    let f = bitBlockInts |> Array.mapi (sprintf "%i %A") |> String.concat "\n"
+    printfn $"\n --> \n{f}"
+    bitBlockInts
+
 let getBitCounts (bitblock: int[][]) =
     let countBits (state: int[]) (curr: int[]) =
         for i = 0 to curr.Length - 1 do
@@ -28,7 +33,7 @@ let calculatePowerConsumption (diagnosticReport: int[][]) =
 
     gamma * epsilon
 
-type DaiganosticReport =
+type DiagnosticBitCount =
     | Equal
     | NotEqual of {| MostCommon: int; LeastCommon: int |}
 
@@ -36,12 +41,7 @@ type DiagnosticRatingCriteria =
     | OxygenGenerator
     | Co2Scrubber
 
-let traceBitBLock bitBlockInts  =
-    let f = bitBlockInts |> Array.mapi (sprintf "%i %A") |> String.concat "\n"
-    printfn $"\n --> \n{f}"
-    bitBlockInts
-
-let determineMostCommonBit bitCount =
+let determineMostCommonBit bitCount: DiagnosticBitCount =
     if bitCount = 0 then
         Equal
     else if 0 < bitCount then
@@ -49,7 +49,7 @@ let determineMostCommonBit bitCount =
         else
             NotEqual {| MostCommon = 0; LeastCommon = 1 |}
 
-let bitToKeep =
+let bitToKeep: DiagnosticRatingCriteria * DiagnosticBitCount -> int =
     function
     | OxygenGenerator, Equal -> 1
     | OxygenGenerator, NotEqual v -> v.MostCommon
@@ -72,7 +72,7 @@ let getLifeSupportRating diagnosticReport =
                     let targetBit = bitLine.[bitIndex]
                     targetBit = bitToKeep
 
-                bitBlock <- Array.filter bitLinePred (traceBitBLock bitBlock)
+                bitBlock <- Array.filter bitLinePred bitBlock
 
         bitArrayToDecimal (bitBlock.[0])
 
