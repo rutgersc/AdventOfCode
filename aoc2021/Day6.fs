@@ -7,45 +7,75 @@ let traceFishes d inp =
     printfn $"{d + 1}\t%A{inp}"
     inp
 
-type FishState = int
-let fishAge = 6
-let newFishAge = fishAge + 2
+let traceFishes2 d inp =
+    printf $"day {d + 1}\t"
+    // for i in [0..8] do
+    // printf $"[{i}={inp.[i]}] "
+    printfn $"\t%A{inp}"
+    inp
 
-let readFishAges (lines: string []) = lines.[0] |> fun line -> line.Split "," |> Array.map int
+let fishAge = 6L
+let newFishAge: int64 = fishAge + 2L
 
+let readFishAges (lines: string []) = lines.[0] |> fun line -> line.Split "," |> Array.map int64
 
-let solve1 maxDays fishes =
-    let rec go days (fishes: array<int>) =
-        let chunkSize = Math.Max(500, fishes.Length / 600)
-        printfn $"{days} {Array.length fishes} {chunkSize}"
+let countFishes fishes =
+    [| for age in 0L .. 8L do
+           yield fishes |> Array.filter ((=) age) |> Array.length |> int64 |]
 
+let solve1 maxDays (fishes: int64 array) =
+    let rec go days fishes =
         if days = 0 then
             fishes
         else
             fishes
-            |> Array.chunkBySize chunkSize
-            |> Array.Parallel.collect (fun block ->
-                block
-                |> Array.collect (function
-                    | 0 -> [| fishAge ; newFishAge |]
-                    | s -> [| s - 1 |]))
-            // |> traceFishes (maxDays - days)
+            |> Array.collect (function
+                | 0L -> [| fishAge ; newFishAge |]
+                | s -> [| s - 1L |])
+            |> traceFishes (maxDays - days)
             |> go (days - 1)
 
     go maxDays fishes |> Seq.length
 
-let time f arg =
-    let sw = Diagnostics.Stopwatch.StartNew()
-    let res = f arg
-    sw.Stop()
-    printfn $"{sw.Elapsed.Seconds}"
-    res
+let solve2 maxDays fishes =
+    let rec go days (fishes: array<int64>) =
+        if days = 0 then
+            fishes
+        else
+            [| fishes.[1] // 0
+               fishes.[2]
+               fishes.[3]
+               fishes.[4]
+               fishes.[5]
+               fishes.[6]
+               fishes.[7] + fishes.[0] // 6
+               fishes.[8]
+               fishes.[0] |] // 8
+            |> go (days - 1)
 
-// let answerExample1a = readLines "Day6-example.txt" |> readFishAges |> solve1 18 // 26
-// let answerExample1b = readLines "Day6-example.txt" |> readFishAges |> solve1 80 // 5934
+    go maxDays fishes |> Seq.sum
 
-// let answer1 = readLines "Day6.txt" |> readFishAges |> solve1 80 // 363101
 
-let answerExample2 = readLines "Day6-example.txt" |> readFishAges |> (time (solve1 256)) // 26
+let answerExample1a = readLines "Day6-example.txt" |> readFishAges |> solve1 18 // 26
+let answerExample1b = readLines "Day6-example.txt" |> readFishAges |> solve1 80 // 5934
+let answer1 = readLines "Day6.txt" |> readFishAges |> solve1 80 // 363101
 
-// let answer2 = readLines "Day5.txt" |> readVents |> solve2 // 19929
+let answerExample1a2 =
+    readLines "Day6-example.txt"
+    |> readFishAges
+    |> countFishes
+    |> solve2 18 // 26
+
+let answerExample1a22 =
+    readLines "Day6-example.txt"
+    |> readFishAges
+    |> countFishes
+    |> solve2 80 // 5934
+
+let answerExample2 =
+    readLines "Day6-example.txt"
+    |> readFishAges
+    |> countFishes
+    |> solve2 256 // 26984457539
+
+let answer2 = readLines "Day6.txt" |> readFishAges |> countFishes |> solve2 256 // 1644286074024L
