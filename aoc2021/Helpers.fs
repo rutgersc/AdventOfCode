@@ -1,9 +1,11 @@
 ﻿module aoc2021.Helpers
 
-
-
 let readLines f =
     System.IO.File.ReadAllLines f
+
+let readCsvLine f =
+    readLines f
+    |> fun l -> l.[0].Split ","
 
 let readBitArrays f: int[][] =
     let charToBit c = if c = '1' then 1 else 0

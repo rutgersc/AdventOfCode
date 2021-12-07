@@ -1,23 +1,15 @@
 module aoc2021.Day6
 
 open Helpers
-open System
 
 let traceFishes d inp =
     printfn $"{d + 1}\t%A{inp}"
     inp
 
-let traceFishes2 d inp =
-    printf $"day {d + 1}\t"
-    // for i in [0..8] do
-    // printf $"[{i}={inp.[i]}] "
-    printfn $"\t%A{inp}"
-    inp
-
 let fishAge = 6L
-let newFishAge: int64 = fishAge + 2L
+let newFishAge = fishAge + 2L
 
-let readFishAges (lines: string []) = lines.[0] |> fun line -> line.Split "," |> Array.map int64
+let parseFishAges = Array.map int64
 
 let countFishes fishes =
     [| for age in 0L .. 8L do
@@ -56,26 +48,28 @@ let solve2 maxDays fishes =
     go maxDays fishes |> Seq.sum
 
 
-let answerExample1a = readLines "Day6-example.txt" |> readFishAges |> solve1 18 // 26
-let answerExample1b = readLines "Day6-example.txt" |> readFishAges |> solve1 80 // 5934
-let answer1 = readLines "Day6.txt" |> readFishAges |> solve1 80 // 363101
+let answerExample1a = readCsvLine "Day6-example.txt" |> parseFishAges |> solve1 18 // 26
+
+let answerExample1b = readCsvLine "Day6-example.txt" |> parseFishAges |> solve1 80 // 5934
+
+let answer1 = readCsvLine "Day6.txt" |> parseFishAges |> solve1 80 // 363101
 
 let answerExample1a2 =
-    readLines "Day6-example.txt"
-    |> readFishAges
+    readCsvLine "Day6-example.txt"
+    |> parseFishAges
     |> countFishes
     |> solve2 18 // 26
 
 let answerExample1a22 =
-    readLines "Day6-example.txt"
-    |> readFishAges
+    readCsvLine "Day6-example.txt"
+    |> parseFishAges
     |> countFishes
     |> solve2 80 // 5934
 
 let answerExample2 =
-    readLines "Day6-example.txt"
-    |> readFishAges
+    readCsvLine "Day6-example.txt"
+    |> parseFishAges
     |> countFishes
     |> solve2 256 // 26984457539
 
-let answer2 = readLines "Day6.txt" |> readFishAges |> countFishes |> solve2 256 // 1644286074024L
+let answer2 = readLines "Day6.txt" |> parseFishAges |> countFishes |> solve2 256 // 1644286074024L

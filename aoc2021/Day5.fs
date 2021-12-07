@@ -22,8 +22,8 @@ let allPointsFromStraightLine (x1: int, y1: int) (x2, y2) =
     let (maxX, maxY) = Math.Max (x1, x2), Math.Max (y1, y2)
 
     seq {
-        for x in minX..maxX do
-            for y in minY..maxY do
+        for x in minX .. maxX do
+            for y in minY .. maxY do
                 yield x, y
     }
 
