@@ -21,6 +21,8 @@ let readNumberLines f =
 let uncurry f (a,b) = f a b
 let notWhitespace s = not (System.String.IsNullOrWhiteSpace (s))
 
+let chars (s: string) = s.ToCharArray () |> Array.toList
+
 module Option =
     let inspect f o =
         o
