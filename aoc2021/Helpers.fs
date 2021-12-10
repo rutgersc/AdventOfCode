@@ -1,5 +1,7 @@
 ﻿module aoc2021.Helpers
 
+open System
+
 let readLines f =
     System.IO.File.ReadAllLines f
 
@@ -22,6 +24,8 @@ let uncurry f (a,b) = f a b
 let notWhitespace s = not (System.String.IsNullOrWhiteSpace (s))
 
 let chars (s: string) = s.ToCharArray () |> Array.toList
+
+let joinChars (s: char seq) = String.Join("", s)
 
 module Option =
     let inspect f o =
