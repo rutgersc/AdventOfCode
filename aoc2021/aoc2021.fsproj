@@ -19,6 +19,11 @@
     <Compile Include="Day8.fs" />
     <Compile Include="Day9.fs" />
     <Compile Include="Day10.fs" />
+    <Compile Include="Day11.fs" />
     <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="dein.Colorify" Version="2.6.0" />
   </ItemGroup>
 </Project>

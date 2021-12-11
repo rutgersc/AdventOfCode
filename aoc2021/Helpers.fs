@@ -1,5 +1,6 @@
 ﻿module aoc2021.Helpers
 
+// #r "nuget: dein.Colorify";;
 open System
 
 let readLines f =
@@ -21,6 +22,8 @@ let readNumberLines f =
     |> Array.map int
 
 let uncurry f (a,b) = f a b
+let curry f a b = f(a,b)
+
 let notWhitespace s = not (System.String.IsNullOrWhiteSpace (s))
 
 let chars (s: string) = s.ToCharArray () |> Array.toList
